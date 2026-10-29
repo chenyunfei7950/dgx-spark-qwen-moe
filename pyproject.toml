@@ -74,3 +74,9 @@ extend-exclude = ["src/tensorfold/families/deepseek_v4/vendor"]   # third-party 
 
 [tool.setuptools.dynamic]
 version = { attr = "tensorfold.__version__" }
+
+# uv resolves/restores against the Aliyun PyPI mirror (default index replaces pypi.org)
+[[tool.uv.index]]
+name = "aliyun"
+url = "https://mirrors.aliyun.com/pypi/simple/"
+default = true

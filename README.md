@@ -61,12 +61,14 @@ two heads correlate 0.98–0.99 after dequantization, which is why the Qwen3.6 f
 # 1. image (the engine ships in src/tensorfold)
 docker pull nvcr.io/nvidia/pytorch:26.07-py3
 cat > Dockerfile <<'DOCKER'
-FROM nvcr.io/nvidia/pytorch:26.07-py3
+ARG BASE_IMAGE=nvcr.io/nvidia/pytorch:26.07-py3
+FROM ${BASE_IMAGE}
 COPY src/tensorfold /usr/local/lib/python3.12/dist-packages/tensorfold
 RUN pip install --no-cache-dir "transformers>=5.3,<6" huggingface_hub anyio click filelock fsspec
 ENV TENSORFOLD_NO_UPDATE_CHECK=1
 DOCKER
 docker build -t dgx-spark-tensorfold:0.6.2-moe-vision .
+# custom base: docker build --build-arg BASE_IMAGE=<image:tag> -t dgx-spark-tensorfold:0.6.2-moe-vision .
 
 # 2. weights (mainland China: export HF_ENDPOINT=https://hf-mirror.com)
 hf download Duckets/Sage-A1.5-MLX-4bit --local-dir /models/Sage-A1.5-MLX-4bit
